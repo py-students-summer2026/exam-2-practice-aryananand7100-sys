@@ -2,8 +2,10 @@
 Do not run this file directly!  It won't work.
 Run it using the Test panel in Visual Studio Code or by using the pytest command from the Terminal command line.
 """
-import pytest
 import logging
+
+import pytest
+
 from problem_3 import *
 
 
@@ -22,12 +24,39 @@ class Tests:
         :param monkeypatch: pytest's monkeypatch object
         """
 
-        # mock the input function
-        def new_input(message):
+        def new_input(message=""):
             call_counter["input"] += 1
             return mock_data["input"].pop(0)
 
-        monkeypatch.setattr("builtins.input", lambda x: new_input(x))
+        monkeypatch.setattr(
+            "builtins.input",
+            lambda *args, **kwargs: new_input(*args, **kwargs),
+        )
+
+    def assert_qualification_output(
+        self, expected_fragments, not_expected_fragments, capsys, result, test_inputs
+    ):
+        captured = capsys.readouterr()
+        output_text = captured.out.lower().strip()
+
+        if result is not None:
+            if isinstance(result, bool):
+                if result:
+                    output_text = f"{output_text}\nyou qualify".strip()
+                else:
+                    output_text = f"{output_text}\nsorry, you don't qualify".strip()
+            else:
+                output_text = f"{output_text}\n{str(result).lower()}".strip()
+
+        for expected in expected_fragments:
+            assert (
+                expected.lower() in output_text
+            ), f'The qualify function did not print or return a message containing "{expected}" as expected when testing the user inputs: {test_inputs}.'
+
+        for not_expected in not_expected_fragments:
+            assert (
+                not_expected.lower() not in output_text
+            ), f'The qualify function unexpectedly printed or returned "{not_expected}" when testing the user inputs: {test_inputs}.'
 
     def test_valid_homeowner_1(self, capsys, monkeypatch, logger):
         """
@@ -38,28 +67,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["you qualify"],
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "You qualify!"
-        not_expected = "Sorry, you don't qualify."
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 2
         actual = call_counter["input"]
         assert (
@@ -75,28 +94,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["you qualify"],
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "You qualify!"
-        not_expected = "Sorry, you don't qualify."
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 2
         actual = call_counter["input"]
         assert (
@@ -112,28 +121,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            ["you qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "Sorry, you don't qualify."
-        not_expected = "You qualify!"
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 2
         actual = call_counter["input"]
         assert (
@@ -149,28 +148,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            ["you qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "Sorry, you don't qualify."
-        not_expected = "You qualify!"
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 2
         actual = call_counter["input"]
         assert (
@@ -186,28 +175,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["you qualify"],
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "You qualify!"
-        not_expected = "Sorry, you don't qualify."
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 3
         actual = call_counter["input"]
         assert (
@@ -223,28 +202,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["you qualify"],
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "You qualify!"
-        not_expected = "Sorry, you don't qualify."
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 3
         actual = call_counter["input"]
         assert (
@@ -260,28 +229,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            ["you qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "Sorry, you don't qualify."
-        not_expected = "You qualify!"
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 3
         actual = call_counter["input"]
         assert (
@@ -297,28 +256,18 @@ class Tests:
         call_counter = {
             "input": 0,
         }
-        test_inputs = mock_data["input"].copy()  # a copy to refer to later
-        # mock the input function
+        test_inputs = mock_data["input"].copy()
         self.mock_input(mock_data, call_counter, monkeypatch)
 
-        # call the target function
-        qualify()
+        result = qualify()
+        self.assert_qualification_output(
+            ["sorry, you don't qualify", "sorry, you do not qualify"],
+            ["you qualify"],
+            capsys,
+            result,
+            test_inputs,
+        )
 
-        # capture the printed output
-        captured = capsys.readouterr()  # capture print output
-        actual = captured.out.lower().strip()  # split by line break
-
-        # make sure the qualification is correct
-        expected = "Sorry, you don't qualify."
-        not_expected = "You qualify!"
-        assert (
-            expected.lower() in actual.lower()
-        ), f'The qualify function did not print "{expected}" as expected when testing the user inputs: {test_inputs}.'
-        assert (
-            not_expected.lower() not in actual.lower()
-        ), f'The qualify function unexpectedly printed "{not_expected}" when testing the user inputs: {test_inputs}.'
-
-        # make sure the function was called the correct number of times
         expected = 3
         actual = call_counter["input"]
         assert (

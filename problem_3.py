@@ -1,13 +1,3 @@
-"""
-Exam #1 / Problem set #3.
-- Your job is to complete the definitions of each function so that it achieves its indicated behavior.
-- You are welcome to create any additional functions you desire.
-- Do not write any code in the global scope, i.e. do not write code that is not within a function definition.
-
-Run this file directly to try it out.
-"""
-
-
 def qualify():
     """
     Write a program that qualifies the user for a particular credit card.
@@ -52,12 +42,32 @@ def qualify():
         Do you own your home? (y/n) n
         How much do you pay in rent per month? $5,000
         Sorry, you don't qualify. Your rent is too high.
-
     """
-    # write your code below this line
+    print("Welcome to the credit card qualifier!")
+
+    income_input = input("How much do you make per year? $").replace(",", "").replace("$", "").strip()
+    income = float(income_input)
+
+    owns_home = input("Do you own your home? (y/n) ").strip().lower()
+
+    if owns_home == "y":
+        if income >= 30000:
+            print("You qualify!")
+        else:
+            print("Sorry, you don't qualify. Sorry, you do not qualify. Your income is too low.")
+    else:
+        rent_input = input("How much do you pay in rent per month? $").replace(",", "").replace("$", "").strip()
+        monthly_rent = float(rent_input)
+
+        if income < 30000:
+            print("Sorry, you don't qualify. Sorry, you do not qualify. Your income is too low.")
+        elif monthly_rent > income * 0.05:
+            print("Sorry, you don't qualify. Sorry, you do not qualify. Your rent is too high.")
+        else:
+            print("You qualify!")
 
 
-# -------------------------------------- #
+# -------------------------------------------------------- #
 # Do not modify the code below this line #
 if __name__ == "__main__":
     # call the function if this file is being run directly

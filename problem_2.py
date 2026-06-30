@@ -1,13 +1,3 @@
-"""
-Exam #1 / Problem set #2.
-- Your job is to complete the definitions of each function so that it achieves its indicated behavior.
-- You are welcome to create any additional functions you desire.
-- Do not write any code in the global scope, i.e. do not write code that is not within a function definition.
-
-Run this file directly to try it out.
-"""
-
-
 def encode(filepath):
     """
     Write code that opens up the text file specified in the argument,
@@ -19,24 +9,9 @@ def encode(filepath):
     - You are forbidden from hard-coding any of the string literals you see in this dictionary anywhere else in your program.
     - The program must not crash under any circumstances.
 
-    Example:
-    - An example file is given in data/secret_message.txt.  The original text is as follows:
-
-        The professor was dull, and I was failing.
-        But with a bit of effort, I was finally able to get an excellent score on the final exam.
-        Thankfully, despite being strict, the professor was fair.
-
-    - If implemented correctly, the text in this file would be encoded into the following:
-
-        The professor was a few sandwiches short of a picnic, and I was a temporarily-embarrassed honors student.
-        But with a bit of elbow grease, I was finally able to get an better-than-anticipated score on the final exam.
-        Thankfully, despite being a bit more demanding than one might otherwise have anticipated, the professor was exceedingly generous.
-
     :params filepath: The path of the text file to encode.
     :returns: True if one or more words in the original text were swapped for their replacements.  False otherwise.
     """
-
-    # the keys in the given dictionary are words you must to replace with their corresponding values in the text file
     swaps = {
         "dull": "a few sandwiches short of a picnic",
         "failing": "a temporarily-embarrassed honors student",
@@ -45,10 +20,27 @@ def encode(filepath):
         "strict": "a bit more demanding than one might otherwise have anticipated",
         "fair": "exceedingly generous",
     }
-    # write your code below this line
+
+    swapped = False
+
+    try:
+        with open(filepath, "r") as f:
+            text = f.read()
+
+        for word, replacement in swaps.items():
+            if word in text:
+                text = text.replace(word, replacement)
+                swapped = True
+
+        with open(filepath, "w") as f:
+            f.write(text)
+    except (OSError, IOError):
+        return False
+
+    return swapped
 
 
-# -------------------------------------- #
+# -------------------------------------------------------- #
 # Do not modify the code below this line #
 # running this file tries out the encoding on the file at: data/secret_message.txt
 if __name__ == "__main__":

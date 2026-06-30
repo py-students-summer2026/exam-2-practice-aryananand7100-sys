@@ -1,13 +1,3 @@
-"""
-Exam #1 / Problem set #1.
-- Your job is to complete the definitions of each function so that it achieves its indicated behavior.
-- You are welcome to create any additional functions you desire.
-- Do not write any code in the global scope, i.e. do not write code that is not within a function definition.
-
-Run this file directly to try it out.
-"""
-
-
 def generate_shopping_list():
     """
     Complete this function so that each time it is run, it generates a shopping list for the user.
@@ -44,12 +34,27 @@ def generate_shopping_list():
         - cheddar (4)
 
         Thank you!
-
     """
-    # write your answer below this line
+    print("Welcome to the shopping list generator!\n")
+
+    shopping_list = []
+
+    while True:
+        item = input("Enter an item to your shopping list: ").strip().lower()
+        if item in ("finished", "done"):
+            break
+        quantity = input(f"How many {item} would you like? ").strip().lower()
+        shopping_list.append((item, quantity))
+        print()
+
+    print("Here is your complete shopping list:")
+    for item, quantity in shopping_list:
+        print(f"- {item} ({quantity})")
+
+    print("\nThank you!")
 
 
-# -------------------------------------- #
+# -------------------------------------------------------- #
 # Do not modify the code below this line #
 if __name__ == "__main__":
     # call the function if this file is being run directly
